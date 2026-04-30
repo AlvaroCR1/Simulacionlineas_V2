@@ -175,40 +175,31 @@ function buildTrayMesh(THREE, color, withStrawberries = true) {
 // ─── _doSpawn — spawna una tarrina en M1 ─────────────────────────────────────
 // THREE y st se pasan explícitamente para evitar dependencias de closure
 function _doSpawn(THREE, st, tray) {
-  if (st.trays.length > 0) return;
+  if (st.trays.length > 30) return;
   const isRej = tray.tipo_M1 === "reject" || tray.tipo_M1 === "sensor";
   const color = trayCol(tray.tipo_M1);
   const mesh = buildTrayMesh(THREE, color, !isRej);
-
   const startX = SEG_CX.M1 - SEG_W.M1 / 2 + 0.1;
-mesh.position.set(startX, BELT_TOP + 0.065, 0);
-// Separación mínima: si hay tarrinas recientes en escena, retroceder el spawn
-const MIN_SEP = 0.45; // distancia mínima entre tarrinas (unidades mundo)
-let spawnX = startX;
-if (st.trays.length > 0) {
-  const lastX = st.trays[st.trays.length - 1].mesh.position.x;
-  if (lastX < startX + MIN_SEP) {
-    spawnX = lastX - MIN_SEP;
-  }
-}
-mesh.position.set(spawnX, BELT_TOP + 0.065, 0);
-
+  mesh.position.set(startX, BELT_TOP + 0.065, 0);
+  mesh.scale.set(0.95, 0.95, 0.95);
+  mesh.userData.trayId = tray.id;
+  st.scene.add(mesh);
   const obj = {
-  id: tray.id,
-  tray,
-  mesh,
-  phase: "M1M2",
-  speedX: V_M1M2,
-  speedY: 0,
-  destX: SEG_CX.M2 + 1.5,
-  segId: "M1",
-  isDeviated: isRej,
-  targetZ: isRej ? -1.1 : 0,
-  targetY: BELT_TOP + 0.065,
-  rejectLevel: isRej ? "M1" : null,   // ← añadir esta línea
-  isFalling: false,
-  glmiCounted: false,
-};
+    id: tray.id,
+    tray,
+    mesh,
+    phase: "M1M2",
+    speedX: V_M1M2,
+    speedY: 0,
+    destX: SEG_CX.M2 + 1.5,
+    segId: "M1",
+    isDeviated: isRej,
+    targetZ: isRej ? -1.1 : 0,
+    targetY: BELT_TOP + 0.065,
+    rejectLevel: isRej ? "M1" : null,
+    isFalling: false,
+    glmiCounted: false,
+  };
   st.trays.push(obj);
   st.trayMap[tray.id] = obj;
 }
