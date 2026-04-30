@@ -19,8 +19,8 @@ export function buildBizerba(THREE, group, seg, imgEl, texOffsets) {
   belt.position.x = BELT_TOP + 0.1;
   group.add(belt);
 
-  // Cinta discriminadora (salida ancha en V)
-buildDiscriminator(THREE, group, seg);
+  // Cinta discriminadora (salida ancha en V) — solo en M1 y M2
+  buildDiscriminator(THREE, group, seg);
 
   if (!window.THREE || !window.THREE.GLTFLoader) {
     console.warn("GLTFLoader no disponible — usando fallback Bizerba");
@@ -34,27 +34,18 @@ buildDiscriminator(THREE, group, seg);
     (gltf) => {
       const model = gltf.scene;
 
-      // Wrapper para aislar transformaciones internas del GLB
       const wrapper = new THREE.Group();
       wrapper.add(model);
 
-      // Escala neutra y posición cero antes de medir
       model.scale.set(1, 1, 1);
       model.position.set(0, 0, 0);
       model.rotation.set(0, 0, 0);
 
-      // Forzar actualización de matrices
       wrapper.updateMatrixWorld(true);
       model.updateMatrixWorld(true);
 
-      // Calcular bounding box recorriendo cada mesh individualmente
-      // (más fiable que setFromObject con GLBs que tienen nodos anidados)
-      let minX = Infinity,
-        minY = Infinity,
-        minZ = Infinity;
-      let maxX = -Infinity,
-        maxY = -Infinity,
-        maxZ = -Infinity;
+      let minX = Infinity, minY = Infinity, minZ = Infinity;
+      let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
       model.traverse((child) => {
         if (child.isMesh && child.geometry) {
           child.geometry.computeBoundingBox();
@@ -73,15 +64,9 @@ buildDiscriminator(THREE, group, seg);
       const sizeY = maxY - minY;
       const sizeZ = maxZ - minZ;
       const centerX = (minX + maxX) / 2;
-      const centerY = (minY + maxY) / 2;
       const centerZ = (minZ + maxZ) / 2;
 
-      console.log(
-        "Bizerba GLB dimensiones originales:",
-        sizeX.toFixed(3),
-        sizeY.toFixed(3),
-        sizeZ.toFixed(3)
-      );
+      console.log("Bizerba GLB dimensiones originales:", sizeX.toFixed(3), sizeY.toFixed(3), sizeZ.toFixed(3));
 
       if (!isFinite(sizeX) || sizeX === 0 || sizeY === 0 || sizeZ === 0) {
         console.error("Bizerba GLB: bounding box inválido");
@@ -89,25 +74,21 @@ buildDiscriminator(THREE, group, seg);
         return;
       }
 
-      // ── Ajusta SCALE_MULTIPLIER hasta conseguir el tamaño visual correcto ──
-      const SCALE_MULTIPLIER = 1.55; // ← sube este valor si el modelo sale pequeño
-      const scale =
-        Math.min(
-          (seg.w * 0.9) / sizeX,
-          (seg.h * 0.9) / sizeY,
-          (seg.d * 0.9) / sizeZ
-        ) * SCALE_MULTIPLIER;
+      const SCALE_MULTIPLIER = 1.55;
+      const scale = Math.min(
+        (seg.w * 0.9) / sizeX,
+        (seg.h * 0.9) / sizeY,
+        (seg.d * 0.9) / sizeZ
+      ) * SCALE_MULTIPLIER;
 
       console.log("Bizerba escala aplicada:", scale.toFixed(5));
       wrapper.scale.setScalar(scale);
       wrapper.position.x = -centerX * scale;
       wrapper.position.z = -centerZ * scale;
-      wrapper.position.y = -minY * scale - 1.3; // ← cambia -1.25 para subir o bajar
+      wrapper.position.y = -minY * scale - 1.3;
 
-      // ── Rotación: ajusta si el frente no mira en la dirección correcta ──
-      model.rotation.y = 0; // prueba Math.PI, Math.PI/2, -Math.PI/2
+      model.rotation.y = 0;
 
-      // Activar sombras y mejorar materiales
       model.traverse((child) => {
         if (child.isMesh) {
           child.castShadow = true;
@@ -125,10 +106,7 @@ buildDiscriminator(THREE, group, seg);
     },
     (progress) => {
       if (progress.total > 0)
-        console.log(
-          "Cargando Bizerba GLB:",
-          Math.round((progress.loaded / progress.total) * 100) + "%"
-        );
+        console.log("Cargando Bizerba GLB:", Math.round((progress.loaded / progress.total) * 100) + "%");
     },
     (error) => {
       console.warn("Error cargando Bizerba GLB, usando fallback:", error);
@@ -139,66 +117,75 @@ buildDiscriminator(THREE, group, seg);
 
 // ─── Fallback geométrico ──────────────────────────────────────────────────────
 function buildFallback(THREE, group, seg) {
-  const inox = new THREE.MeshStandardMaterial({
-    color: 0xc4ccd0,
-    roughness: 0.22,
-    metalness: 0.78,
-  });
-  const blue = new THREE.MeshStandardMaterial({
-    color: 0x1a3a8a,
-    roughness: 0.5,
-    metalness: 0.2,
-  });
+  const inox = new THREE.MeshStandardMaterial({ color: 0xc4ccd0, roughness: 0.22, metalness: 0.78 });
+  const blue = new THREE.MeshStandardMaterial({ color: 0x1a3a8a, roughness: 0.5, metalness: 0.2 });
 
-  // 4 patas
-  [
-    [-0.42, -0.5],
-    [0.42, -0.5],
-    [-0.42, 0.5],
-    [0.42, 0.5],
-  ].forEach(([x, z]) => {
-    const leg = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.03, 0.03, 1.48, 8),
-      inox
-    );
+  [[-0.42, -0.5], [0.42, -0.5], [-0.42, 0.5], [0.42, 0.5]].forEach(([x, z]) => {
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.48, 8), inox);
     leg.position.set(x, -0.49, z);
     leg.castShadow = true;
     group.add(leg);
-    const fp = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.055, 0.065, 0.04, 8),
-      inox
-    );
+    const fp = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.04, 8), inox);
     fp.position.set(x, -1.35, z);
     group.add(fp);
   });
 
-  // Plataforma azul
-  const platform = new THREE.Mesh(
-    new THREE.BoxGeometry(seg.w, 0.06, seg.d * 0.88),
-    blue
-  );
+  const platform = new THREE.Mesh(new THREE.BoxGeometry(seg.w, 0.06, seg.d * 0.88), blue);
   platform.position.y = -0.28;
   platform.castShadow = true;
   group.add(platform);
 
-  // Cuerpo principal
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(seg.w, seg.h * 0.5, seg.d),
-    inox
-  );
+  const body = new THREE.Mesh(new THREE.BoxGeometry(seg.w, seg.h * 0.5, seg.d), inox);
   body.position.y = seg.h * 0.25 - 1.0;
   body.castShadow = true;
   group.add(body);
 
-  // Ribete superior
   const rib = new THREE.Mesh(
     new THREE.BoxGeometry(seg.w + 0.04, 0.05, seg.d + 0.04),
-    new THREE.MeshStandardMaterial({
-      color: 0x2a2e32,
-      roughness: 0.4,
-      metalness: 0.7,
-    })
+    new THREE.MeshStandardMaterial({ color: 0x2a2e32, roughness: 0.4, metalness: 0.7 })
   );
   rib.position.y = BELT_TOP + 0.025;
   group.add(rib);
+}
+
+// ─── Discriminador: cinta en V a la salida de cada Bizerba ───────────────────
+// Reproduce visualmente la DTR-017 (M1) y DTR-018 (M2) del plano.
+// Las tarrinas OK siguen recto; las rechazadas se desvían a Z+ o Z-.
+function buildDiscriminator(THREE, group, seg) {
+  const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
+  const beltMat = new THREE.MeshStandardMaterial({ color: 0x484e53, roughness: 0.9, metalness: 0.05 });
+
+  // Cinta central de salida (fila única — tarrinas OK)
+  const centerBelt = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.04, 0.38), beltMat);
+  centerBelt.position.set(seg.w * 0.6, BELT_TOP, 0);
+  group.add(centerBelt);
+
+  // Brazo izquierdo (tarrinas ligeras — Z+)
+  const leftBelt = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.04, 0.28), beltMat);
+  leftBelt.position.set(seg.w * 0.52, BELT_TOP, 0.58);
+  leftBelt.rotation.y = Math.PI / 6;
+  group.add(leftBelt);
+
+  // Brazo derecho (tarrinas pesadas — Z-)
+  const rightBelt = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.04, 0.28), beltMat);
+  rightBelt.position.set(seg.w * 0.52, BELT_TOP, -0.58);
+  rightBelt.rotation.y = -Math.PI / 6;
+  group.add(rightBelt);
+
+  // Guías laterales en V (inox)
+  [-0.92, 0.92].forEach((dz) => {
+    const guide = new THREE.Mesh(new THREE.BoxGeometry(1.25, 0.12, 0.04), inox);
+    guide.position.set(seg.w * 0.52, BELT_TOP + 0.09, dz);
+    guide.rotation.y = dz > 0 ? Math.PI / 6 : -Math.PI / 6;
+    group.add(guide);
+  });
+
+  // Rodillo de retorno en la bifurcación
+  const roller = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.055, 0.055, 1.4, 12),
+    new THREE.MeshStandardMaterial({ color: 0x889aaa, roughness: 0.3, metalness: 0.8 })
+  );
+  roller.rotation.z = Math.PI / 2;
+  roller.position.set(seg.w * 0.42, BELT_TOP - 0.01, 0);
+  group.add(roller);
 }
