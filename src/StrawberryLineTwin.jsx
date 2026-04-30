@@ -258,11 +258,12 @@ export default function StrawberryLineTwin({ engine }) {
     };
 
     engine.onSpawn = (tray) => {
-      const THREE = window.THREE;
-      const scene = stRef.current.scene;
-      if (!THREE || !scene) return;
-      _doSpawn(THREE, stRef.current, tray);
-    };
+  const THREE = window.THREE;
+  const scene = stRef.current.scene;
+  console.log("onSpawn guard:", !!THREE, !!scene);
+  if (!THREE || !scene) return;
+  _doSpawn(THREE, stRef.current, tray);
+};
 
     engine.onReachM2 = (tray) => {
       const obj = st.trayMap[tray.id];
