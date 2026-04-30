@@ -19,6 +19,9 @@ export function buildBizerba(THREE, group, seg, imgEl, texOffsets) {
   belt.position.x = BELT_TOP + 0.1;
   group.add(belt);
 
+  // Cinta discriminadora (salida ancha en V)
+buildDiscriminator(THREE, group, seg);
+
   if (!window.THREE || !window.THREE.GLTFLoader) {
     console.warn("GLTFLoader no disponible — usando fallback Bizerba");
     buildFallback(THREE, group, seg);
