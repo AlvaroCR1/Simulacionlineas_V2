@@ -381,9 +381,10 @@ export default function StrawberryLineTwin({ engine }) {
         if (st.renderer.domElement.parentNode === container)
           container.removeChild(st.renderer.domElement);
       }
-      if (s1.parentNode) document.head.removeChild(s1);
+     if (s1.parentNode) document.head.removeChild(s1);
     };
-    }, []); // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function initThree(st, container) {
     const THREE = window.THREE;
