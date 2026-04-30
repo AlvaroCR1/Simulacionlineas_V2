@@ -839,35 +839,31 @@ scene.add(f2);
       r.rotation.x = Math.PI / 2; r.position.set((s * seg.w) / 2, 0.09, 0); group.add(r);
     });
     const bt = makeBeltTex(window.THREE);
-    st.textureOffsets[seg.id] = bt;
+    const segId = seg.id;
+    st.textureOffsets[segId] = bt;
     const belt = new THREE.Mesh(
       new THREE.BoxGeometry(seg.w, 0.04, seg.d * 0.88),
       new THREE.MeshStandardMaterial({ map: bt, color: 0x484e53, roughness: 0.9, metalness: 0.05 })
     );
     belt.position.y = BELT_TOP - 0.02; group.add(belt);
-  }
-
-  // Embudo convergente para C12
-    if (seg.id === "C12") {
+    if (segId === "C12") {
       const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
-      // Guía izquierda convergente (Z+ → centro)
       const guideL = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.8, 0.1, 0.04), inox);
       guideL.position.set(0, BELT_TOP + 0.07, 0.62);
       guideL.rotation.y = -Math.PI / 7;
       group.add(guideL);
-      // Guía derecha convergente (Z- → centro)
       const guideR = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.8, 0.1, 0.04), inox);
       guideR.position.set(0, BELT_TOP + 0.07, -0.62);
       guideR.rotation.y = Math.PI / 7;
       group.add(guideR);
-      // Guías de salida (ya centradas, fila única)
       [-0.28, 0.28].forEach((dz) => {
         const guideOut = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.35, 0.1, 0.04), inox);
         guideOut.position.set(seg.w * 0.28, BELT_TOP + 0.07, dz);
         group.add(guideOut);
       });
     }
-
+  }
+  
   // ── buildModular ───────────────────────────────────────────────────────────
   function buildModular(THREE, group, seg, st) {
     const lg = new THREE.MeshStandardMaterial({ color: 0xb0bcc4, roughness: 0.35, metalness: 0.55 });
