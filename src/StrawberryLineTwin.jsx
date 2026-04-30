@@ -181,10 +181,16 @@ function _doSpawn(THREE, st, tray) {
   const mesh = buildTrayMesh(THREE, color, !isRej);
 
   const startX = SEG_CX.M1 - SEG_W.M1 / 2 + 0.1;
-  mesh.position.set(startX, BELT_TOP + 0.065, 0);
-  mesh.scale.set(0.95, 0.95, 0.95);
-  mesh.userData.trayId = tray.id;
-  st.scene.add(mesh);
+// Separación mínima: si hay tarrinas recientes en escena, retroceder el spawn
+const MIN_SEP = 0.45; // distancia mínima entre tarrinas (unidades mundo)
+let spawnX = startX;
+if (st.trays.length > 0) {
+  const lastX = st.trays[st.trays.length - 1].mesh.position.x;
+  if (lastX < startX + MIN_SEP) {
+    spawnX = lastX - MIN_SEP;
+  }
+}
+mesh.position.set(spawnX, BELT_TOP + 0.065, 0);
 
   const obj = {
   id: tray.id,
