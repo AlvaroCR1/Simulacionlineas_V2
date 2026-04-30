@@ -429,12 +429,12 @@ export default function StrawberryLineTwin({ engine }) {
     sun.shadow.camera.bottom = -25;
     sun.shadow.bias = -0.001;
     scene.add(sun);
-    scene.add(Object.assign(new THREE.DirectionalLight(0xd8eeff, 0.4), {
-      position: new THREE.Vector3(-15, 8, 12),
-    }));
-    scene.add(Object.assign(new THREE.DirectionalLight(0xffe8d0, 0.3), {
-      position: new THREE.Vector3(15, 5, -10),
-    }));
+    const f1 = new THREE.DirectionalLight(0xd8eeff, 0.4);
+f1.position.set(-15, 8, 12);
+scene.add(f1);
+const f2 = new THREE.DirectionalLight(0xffe8d0, 0.3);
+f2.position.set(15, 5, -10);
+scene.add(f2);
 
     buildGround(THREE, scene, st);
 
