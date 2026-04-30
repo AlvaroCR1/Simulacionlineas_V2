@@ -175,6 +175,7 @@ function buildTrayMesh(THREE, color, withStrawberries = true) {
 // ─── _doSpawn — spawna una tarrina en M1 ─────────────────────────────────────
 // THREE y st se pasan explícitamente para evitar dependencias de closure
 function _doSpawn(THREE, st, tray) {
+  console.log("doSpawn scene:", !!st.scene, "tray:", tray.id);
   const isRej = tray.tipo_M1 === "reject" || tray.tipo_M1 === "sensor";
   const color = trayCol(tray.tipo_M1);
   const mesh = buildTrayMesh(THREE, color, !isRej);
