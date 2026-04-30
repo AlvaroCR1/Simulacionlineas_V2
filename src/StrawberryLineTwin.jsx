@@ -383,7 +383,7 @@ export default function StrawberryLineTwin({ engine }) {
       }
       if (s1.parentNode) document.head.removeChild(s1);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []); // eslint-disable-next-line
 
   function initThree(st, container) {
     const THREE = window.THREE;
