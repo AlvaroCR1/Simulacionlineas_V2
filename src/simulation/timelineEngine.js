@@ -166,6 +166,16 @@ export class TimelineEngine {
       if (this.onReachM4) this.onReachM4(this._byM4[this._idxM4]);
       this._idxM4++;
     }
+    let spawnCount = 0;
+while (
+  this._idxSpawn < this._byM1.length &&
+  this._byM1[this._idxSpawn].tMs_M1 <= abs &&
+  spawnCount < 5
+) {
+  if (this.onSpawn) this.onSpawn(this._byM1[this._idxSpawn]);
+  this._idxSpawn++;
+  spawnCount++;
+}
   }
 
   _checkStops() {
