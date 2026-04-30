@@ -186,51 +186,28 @@ export default function TimelinePlayer({ engine, onLoad, visible = true }) {
     };
 
     // Log: spawns y llegadas
+    const prevSpawn = engine.onSpawn;
+    const prevM2 = engine.onReachM2;
+    const prevM4 = engine.onReachM4;
+
     engine.onSpawn = (tray) => {
+      if (prevSpawn) prevSpawn(tray);
       setLog((prev) =>
-        [
-          {
-            t: tray.tMs_M1,
-            machine: "M1",
-            tipo: tray.tipo_M1,
-            peso: tray.peso_M1,
-            id: tray.id,
-            event: "spawn",
-          },
-          ...prev,
-        ].slice(0, MAX_LOG)
+        [{ t: tray.tMs_M1, machine: "M1", tipo: tray.tipo_M1, peso: tray.peso_M1, id: tray.id, event: "spawn" }, ...prev].slice(0, MAX_LOG)
       );
     };
     engine.onReachM2 = (tray) => {
+      if (prevM2) prevM2(tray);
       if (!tray.tipo_M2 || tray.tipo_M2 === "system") return;
       setLog((prev) =>
-        [
-          {
-            t: tray.tMs_M2,
-            machine: "M2",
-            tipo: tray.tipo_M2,
-            peso: tray.peso_M2,
-            id: tray.id,
-            event: "m2",
-          },
-          ...prev,
-        ].slice(0, MAX_LOG)
+        [{ t: tray.tMs_M2, machine: "M2", tipo: tray.tipo_M2, peso: tray.peso_M2, id: tray.id, event: "m2" }, ...prev].slice(0, MAX_LOG)
       );
     };
     engine.onReachM4 = (tray) => {
+      if (prevM4) prevM4(tray);
       if (!tray.tipo_M4 || tray.tipo_M4 === "system") return;
       setLog((prev) =>
-        [
-          {
-            t: tray.tMs_M4,
-            machine: "M4",
-            tipo: tray.tipo_M4,
-            peso: tray.peso_M4,
-            id: tray.id,
-            event: "m4",
-          },
-          ...prev,
-        ].slice(0, MAX_LOG)
+        [{ t: tray.tMs_M4, machine: "M4", tipo: tray.tipo_M4, peso: tray.peso_M4, id: tray.id, event: "m4" }, ...prev].slice(0, MAX_LOG)
       );
     };
 
