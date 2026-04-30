@@ -175,12 +175,14 @@ function buildTrayMesh(THREE, color, withStrawberries = true) {
 // ─── _doSpawn — spawna una tarrina en M1 ─────────────────────────────────────
 // THREE y st se pasan explícitamente para evitar dependencias de closure
 function _doSpawn(THREE, st, tray) {
+  if (st.trays.length > 40) return; // máx 40 tarrinas en escena
   console.log("doSpawn scene:", !!st.scene, "tray:", tray.id);
   const isRej = tray.tipo_M1 === "reject" || tray.tipo_M1 === "sensor";
   const color = trayCol(tray.tipo_M1);
   const mesh = buildTrayMesh(THREE, color, !isRej);
 
   const startX = SEG_CX.M1 - SEG_W.M1 / 2 + 0.1;
+mesh.position.set(startX, BELT_TOP + 0.065, 0);
 // Separación mínima: si hay tarrinas recientes en escena, retroceder el spawn
 const MIN_SEP = 0.45; // distancia mínima entre tarrinas (unidades mundo)
 let spawnX = startX;
