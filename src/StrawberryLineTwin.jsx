@@ -187,20 +187,21 @@ function _doSpawn(THREE, st, tray) {
   st.scene.add(mesh);
 
   const obj = {
-    id: tray.id,
-    tray,
-    mesh,
-    phase: "M1M2",
-    speedX: V_M1M2,
-    speedY: 0,
-    destX: SEG_CX.M2 + 1.5,
-    segId: "M1",
-    isDeviated: isRej,
-    targetZ: isRej ? -1.1 : 0,
-    targetY: BELT_TOP + 0.065,
-    isFalling: false,
-    glmiCounted: false,
-  };
+  id: tray.id,
+  tray,
+  mesh,
+  phase: "M1M2",
+  speedX: V_M1M2,
+  speedY: 0,
+  destX: SEG_CX.M2 + 1.5,
+  segId: "M1",
+  isDeviated: isRej,
+  targetZ: isRej ? -1.1 : 0,
+  targetY: BELT_TOP + 0.065,
+  rejectLevel: isRej ? "M1" : null,   // ← añadir esta línea
+  isFalling: false,
+  glmiCounted: false,
+};
   st.trays.push(obj);
   st.trayMap[tray.id] = obj;
 }
@@ -580,8 +581,8 @@ scene.add(f2);
           pos.z += (t.targetZ - pos.z) * Math.min(delta * 4, 1);
 
         // Interpolación suave Y (módulo circular / trampilla)
-        if (t.targetY !== undefined && !t.isFalling && Math.abs(pos.y - t.targetY) > 0.005)
-          pos.y += (t.targetY - pos.y) * Math.min(delta * 3, 1);
+        if (t.targetY !== undefined && !t.isFalling && t.rejectLevel !== "M1" && Math.abs(pos.y - t.targetY) > 0.005)
+        pos.y += (t.targetY - pos.y) * Math.min(delta * 3, 1);
 
         if (t.isFalling) {
           pos.y += t.speedY * delta;
