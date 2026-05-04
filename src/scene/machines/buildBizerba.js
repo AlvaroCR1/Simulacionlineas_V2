@@ -157,18 +157,18 @@ function buildDiscriminator(THREE, group, seg) {
 
   // Cinta central de salida (fila única — tarrinas OK)
   const centerBelt = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.04, 0.38), beltMat);
-  centerBelt.position.set(seg.w * 0.6, BELT_TOP, 0);
+  centerBelt.position.set(seg.w * 0.8, BELT_TOP, 0);
   group.add(centerBelt);
 
   // Brazo izquierdo (tarrinas ligeras — Z+)
   const leftBelt = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.04, 0.28), beltMat);
-  leftBelt.position.set(seg.w * 0.52, BELT_TOP, 0.58);
+  leftBelt.position.set(seg.w * 0.75, BELT_TOP, 0.75);
   leftBelt.rotation.y = Math.PI / 6;
   group.add(leftBelt);
 
   // Brazo derecho (tarrinas pesadas — Z-)
   const rightBelt = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.04, 0.28), beltMat);
-  rightBelt.position.set(seg.w * 0.52, BELT_TOP, -0.58);
+  rightBelt.position.set(seg.w * 0.75, BELT_TOP, -0.75);
   rightBelt.rotation.y = -Math.PI / 6;
   group.add(rightBelt);
 
