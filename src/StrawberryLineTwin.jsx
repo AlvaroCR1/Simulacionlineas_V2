@@ -289,10 +289,8 @@ export default function StrawberryLineTwin({ engine }) {
       obj.destX = SEG_CX.M4 + 0.8;
       obj.segId = "M2";
       obj.targetZ = 0;
-      obj.targetY =
-        tray.tipo_M2 === "reject" || tray.tipo_M2 === "sensor"
-          ? BELT_TOP + 0.065 - 0.6
-          : BELT_TOP + 0.065;
+      obj.goCircular = tray.tipo_M2 === "reject" || tray.tipo_M2 === "sensor";
+      obj.targetY = BELT_TOP + 0.065; // siempre empieza recto
     };
 
     engine.onReachM4 = (tray) => {
@@ -606,6 +604,11 @@ scene.add(f2);
           // Reconvergencia en C12: volver al centro
         if (t.discriminatedM1 && t.phase === "M1M2" && pos.x >= -26.5) {
           t.targetZ = 0;
+        }
+          // Bajar al módulo circular solo cuando llega físicamente a M2
+        if (t.goCircular && t.phase === "M2M4" && pos.x >= SEG_CX.M2) {
+          t.targetY = BELT_TOP + 0.065 - 0.6;
+          t.goCircular = false;
         }
         }
         // Actualizar segId para el sistema de pausas
