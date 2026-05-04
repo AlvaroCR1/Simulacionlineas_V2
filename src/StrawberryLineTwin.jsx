@@ -867,18 +867,30 @@ scene.add(f2);
     belt.position.y = BELT_TOP - 0.02; group.add(belt);
      if (segId === "C12") {
       const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
-      
-      // Guía superior: desde centro-izquierda hacia borde superior-derecha
-      const guideL = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.55, 0.06, 0.04), inox);
-      guideL.position.set(seg.w * 0.1, BELT_TOP + 0.05, 0.35);
-      guideL.rotation.y = Math.PI / 5;
-      group.add(guideL);
 
-      // Guía inferior: desde centro-izquierda hacia borde inferior-derecha
-      const guideR = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.55, 0.06, 0.04), inox);
-      guideR.position.set(seg.w * 0.1, BELT_TOP + 0.05, -0.35);
-      guideR.rotation.y = -Math.PI / 5;
-      group.add(guideR);
+      // Rama superior izquierda
+      const g1 = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.45, 0.06, 0.04), inox);
+      g1.position.set(-seg.w * 0.15, BELT_TOP + 0.05, 0.45);
+      g1.rotation.y = Math.PI / 6;
+      group.add(g1);
+
+      // Rama superior derecha (continúa hacia el borde)
+      const g2 = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.35, 0.06, 0.04), inox);
+      g2.position.set(seg.w * 0.2, BELT_TOP + 0.05, 0.72);
+      g2.rotation.y = Math.PI / 14;
+      group.add(g2);
+
+      // Rama inferior izquierda
+      const g3 = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.45, 0.06, 0.04), inox);
+      g3.position.set(-seg.w * 0.15, BELT_TOP + 0.05, -0.45);
+      g3.rotation.y = -Math.PI / 6;
+      group.add(g3);
+
+      // Rama inferior derecha (continúa hacia el borde)
+      const g4 = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.35, 0.06, 0.04), inox);
+      g4.position.set(seg.w * 0.2, BELT_TOP + 0.05, -0.72);
+      g4.rotation.y = -Math.PI / 14;
+      group.add(g4);
     }
   }
   
