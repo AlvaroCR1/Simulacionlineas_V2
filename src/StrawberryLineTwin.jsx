@@ -865,21 +865,18 @@ scene.add(f2);
       new THREE.MeshStandardMaterial({ map: bt, color: 0x484e53, roughness: 0.9, metalness: 0.05 })
     );
     belt.position.y = BELT_TOP - 0.02; group.add(belt);
-    if (segId === "C12") {
+     if (segId === "C12") {
       const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
-      const guideL = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.8, 0.1, 0.04), inox);
-      guideL.position.set(-seg.w * 0.1, BELT_TOP + 0.07, 0.62);
-      guideL.rotation.y = Math.PI / 7;
+      
+      const guideL = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.75, 0.06, 0.04), inox);
+      guideL.position.set(-seg.w * 0.05, BELT_TOP + 0.05, 0.55);
+      guideL.rotation.y = -Math.PI / 5;
       group.add(guideL);
-      const guideR = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.8, 0.1, 0.04), inox);
-      guideR.position.set(-seg.w * 0.1, BELT_TOP + 0.07, -0.62);
-      guideR.rotation.y = -Math.PI / 7;
+
+      const guideR = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.75, 0.06, 0.04), inox);
+      guideR.position.set(-seg.w * 0.05, BELT_TOP + 0.05, -0.55);
+      guideR.rotation.y = Math.PI / 5;
       group.add(guideR);
-      [-0.28, 0.28].forEach((dz) => {
-        const guideOut = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.35, 0.1, 0.04), inox);
-        guideOut.position.set(seg.w * 0.28, BELT_TOP + 0.07, dz);
-        group.add(guideOut);
-      });
     }
   }
   
