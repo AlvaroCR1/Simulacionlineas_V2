@@ -598,7 +598,7 @@ scene.add(f2);
         } else if (st.running) {
           pos.x += t.speedX * delta;
           // Discriminar al llegar al centro de M1
-        if (!t.discriminatedM1 && t.phase === "M1M2" && pos.x >= SEG_CX.M1) {
+        if (!t.discriminatedM1 && t.phase === "M1M2" && pos.x >= SEG_CX.M1 + 1.8) {
           t.discriminatedM1 = true;
           if (t.peso_bajo) t.targetZ = 1.1;
           else if (t.peso_alto) t.targetZ = -1.1;
