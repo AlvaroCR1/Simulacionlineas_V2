@@ -226,6 +226,15 @@ function _doSpawn(THREE, st, tray) {
   st.trayMap[tray.id] = obj;
 }
 
+export default function StrawberryLineTwin({ engine }) {
+  const mountRef = useRef(null);
+  const stRef = useRef(makeInitialState());
+  const engineRef = useRef(null);
+  const rafRef = useRef(null);
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [accordion, setAccordion] = useState({ estado: true, controles: false, nav: false });
+  const [ui, setUi] = useState({ running: false, ctrlStates: {}, pausedSegments: new Set(), segmentStatuses: {}, engineLoaded: false });
   // Conectar engine: todos los callbacks se asignan aqui, no en el loop.
   // onSpawn usa window.THREE y stRef.current.scene via lazy getter —
   // ambos estan garantizados cuando el usuario pulsa Play.
