@@ -132,6 +132,8 @@ export async function parseWeighingFile(file) {
       tipo_M1: r1.tipo,
       peso_M1: r1.peso,
       flag_M1: r1.flag,
+      peso_bajo: r1.peso < r1.pesoMin,   // true = va baja → discrimina a la izquierda
+      peso_alto: r1.peso > r1.pesoMax,   // true = va alta → discrimina a la derecha
       // M2 — puede faltar las últimas 16
       tMs_M2: r2?.tMs ?? null,
       tipo_M2: r2?.tipo ?? null,
