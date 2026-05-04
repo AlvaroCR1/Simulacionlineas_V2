@@ -151,32 +151,38 @@ export const CTRL_DEFS = [
     segId: "M1",
     type: "seta",
     side: "front",
-    dx: 3.5,      // era 1.2
-    ...
+    dx: 3.5,
+    dz: 0,
+    groupId: "box_M1_front",
   },
   {
     id: "btn_M1_front",
     segId: "M1",
     type: "botonera",
     side: "front",
-    dx: 3.5,      // era 1.2
-    ...
+    dx: 3.5,
+    dz: 0,
+    groupId: "box_M1_front",
+    pauseOnly: ["M1", "C12"],
   },
   {
     id: "seta_M1_back",
     segId: "M1",
     type: "seta",
     side: "back",
-    dx: 3.5,      // era 1.2
-    ...
+    dx: 3.5,
+    dz: 0,
+    groupId: "box_M1_back",
   },
   {
     id: "btn_M1_back",
     segId: "M1",
     type: "botonera",
     side: "back",
-    dx: 3.5,      // era 1.2
-    ...
+    dx: 3.5,
+    dz: 0,
+    groupId: "box_M1_back",
+    pauseOnly: ["M1", "C12"],
   },
 
   // ── Seta junto a Bizerba 2 (solo seta, caja simple) ─────────────────────
