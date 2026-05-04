@@ -171,19 +171,38 @@ function buildTrayMesh(THREE, color, withStrawberries = true) {
   g.add(film);
   return g;
 }
-
-// ─── _doSpawn — spawna una tarrina en M1 ─────────────────────────────────────
-// THREE y st se pasan explícitamente para evitar dependencias de closure
 function _doSpawn(THREE, st, tray) {
   if (st.trays.length > 30) return;
   const isRej = tray.tipo_M1 === "reject" || tray.tipo_M1 === "sensor";
   const color = trayCol(tray.tipo_M1);
   const mesh = buildTrayMesh(THREE, color, !isRej);
-  const startX = SEG_CX.M1 - SEG_W.M1 / 2 + 0.1;
+
+  // Spawn ANTES de M1, todas rectas
+  const startX = -28.5;
   mesh.position.set(startX, BELT_TOP + 0.065, 0);
   mesh.scale.set(0.95, 0.95, 0.95);
   mesh.userData.trayId = tray.id;
+
+  // Tag con número de orden
+  const canvas = document.createElement("canvas");
+  canvas.width = 64; canvas.height = 32;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "rgba(0,0,0,0.75)";
+  ctx.fillRect(0, 0, 64, 32);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 18px monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(String(tray.id), 32, 16);
+  const tag = new THREE.Sprite(
+    new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), depthTest: false })
+  );
+  tag.scale.set(0.35, 0.18, 1);
+  tag.position.set(0, 0.22, 0);
+  mesh.add(tag);
+
   st.scene.add(mesh);
+
   const obj = {
     id: tray.id,
     tray,
@@ -194,36 +213,18 @@ function _doSpawn(THREE, st, tray) {
     destX: SEG_CX.M2 + 1.5,
     segId: "M1",
     isDeviated: isRej,
-    targetZ: tray.peso_bajo ? 1.1 : tray.peso_alto ? -1.1 : 0,
+    targetZ: 0,          // nace recto — discrimina al llegar a M1
     targetY: BELT_TOP + 0.065,
     rejectLevel: isRej ? "M1" : null,
+    discriminatedM1: false,
+    peso_bajo: tray.peso_bajo,
+    peso_alto: tray.peso_alto,
     isFalling: false,
     glmiCounted: false,
   };
   st.trays.push(obj);
   st.trayMap[tray.id] = obj;
 }
-
-
-export default function StrawberryLineTwin({ engine }) {
-  const mountRef = useRef(null);
-  const stRef = useRef(makeInitialState());
-  const engineRef = useRef(null); // ← REF CLAVE: accesible desde el closure de Three.js
-  const rafRef = useRef(null);
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [accordion, setAccordion] = useState({
-    estado: true,
-    controles: false,
-    nav: false,
-  });
-  const [ui, setUi] = useState({
-    running: false,
-    ctrlStates: {},
-    pausedSegments: new Set(),
-    segmentStatuses: {},
-    engineLoaded: false,
-  });
 
   // Conectar engine: todos los callbacks se asignan aqui, no en el loop.
   // onSpawn usa window.THREE y stRef.current.scene via lazy getter —
@@ -587,6 +588,12 @@ scene.add(f2);
           if (pos.y < GROUND_Y - 1) { toRemove.push(t); return; }
         } else if (st.running) {
           pos.x += t.speedX * delta;
+          // Discriminar al llegar al centro de M1
+        if (!t.discriminatedM1 && t.phase === "M1M2" && pos.x >= SEG_CX.M1) {
+          t.discriminatedM1 = true;
+          if (t.peso_bajo) t.targetZ = 1.1;
+          else if (t.peso_alto) t.targetZ = -1.1;
+        }
         }
         // Actualizar segId para el sistema de pausas
         const seg = SEGMENTS.find((s) => s.id === t.segId);
