@@ -865,20 +865,19 @@ scene.add(f2);
       new THREE.MeshStandardMaterial({ map: bt, color: 0x484e53, roughness: 0.9, metalness: 0.05 })
     );
     belt.position.y = BELT_TOP - 0.02; group.add(belt);
-     if (segId === "C12") {
+       if (segId === "C12") {
       const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
       
-      // Rama superior: desde vértice (-1.5, 0) hasta extremo (3.0, 0.75)
-      const guideL = new THREE.Mesh(new THREE.BoxGeometry(4.56, 0.06, 0.04), inox);
+      const guideL = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.06, 0.04), inox);
       guideL.position.set(0.75, BELT_TOP + 0.05, 0.375);
-      guideL.rotation.y = -0.165;
+      guideL.rotation.y = 0.165;
       group.add(guideL);
 
-      // Rama inferior: desde vértice (-1.5, 0) hasta extremo (3.0, -0.75)
-      const guideR = new THREE.Mesh(new THREE.BoxGeometry(4.56, 0.06, 0.04), inox);
+      const guideR = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.06, 0.04), inox);
       guideR.position.set(0.75, BELT_TOP + 0.05, -0.375);
-      guideR.rotation.y = 0.165;
+      guideR.rotation.y = -0.165;
       group.add(guideR);
+    }
     }
   }
   
