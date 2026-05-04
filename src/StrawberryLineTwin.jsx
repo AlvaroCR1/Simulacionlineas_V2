@@ -603,6 +603,10 @@ scene.add(f2);
           if (t.peso_bajo) t.targetZ = 1.1;
           else if (t.peso_alto) t.targetZ = -1.1;
         }
+          // Reconvergencia en C12: volver al centro
+        if (t.discriminatedM1 && t.phase === "M1M2" && pos.x >= -23.2) {
+          t.targetZ = 0;
+        }
         }
         // Actualizar segId para el sistema de pausas
         const tSegId = t.segId;
