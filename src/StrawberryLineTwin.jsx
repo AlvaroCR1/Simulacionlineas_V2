@@ -194,7 +194,7 @@ function _doSpawn(THREE, st, tray) {
     destX: SEG_CX.M2 + 1.5,
     segId: "M1",
     isDeviated: isRej,
-    targetZ: isRej ? -1.1 : 0,
+    targetZ: tray.peso_bajo ? 1.1 : tray.peso_alto ? -1.1 : 0,
     targetY: BELT_TOP + 0.065,
     rejectLevel: isRej ? "M1" : null,
     isFalling: false,
