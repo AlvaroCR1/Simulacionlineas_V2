@@ -152,40 +152,45 @@ function buildFallback(THREE, group, seg) {
 // Reproduce visualmente la DTR-017 (M1) y DTR-018 (M2) del plano.
 // Las tarrinas OK siguen recto; las rechazadas se desvían a Z+ o Z-.
 function buildDiscriminator(THREE, group, seg) {
-  const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
   const beltMat = new THREE.MeshStandardMaterial({ color: 0x484e53, roughness: 0.9, metalness: 0.05 });
+  const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
+  const rollerMat = new THREE.MeshStandardMaterial({ color: 0x889aaa, roughness: 0.3, metalness: 0.8 });
 
-  // Cinta central de salida (fila única — tarrinas OK)
-  const centerBelt = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.04, 0.38), beltMat);
-  centerBelt.position.set(seg.w * 0.8, BELT_TOP, 0);
-  group.add(centerBelt);
+  // Cinta discriminadora ancha (después de la cinta principal)
+  const discBelt = new THREE.Mesh(
+    new THREE.BoxGeometry(1.2, 0.04, 2.2),
+    beltMat
+  );
+  discBelt.position.set(seg.w * 0.9, BELT_TOP, 0);
+  group.add(discBelt);
 
-  // Brazo izquierdo (tarrinas ligeras — Z+)
-  const leftBelt = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.04, 0.28), beltMat);
-  leftBelt.position.set(seg.w * 0.75, BELT_TOP, 0.75);
-  leftBelt.rotation.y = Math.PI / 6;
-  group.add(leftBelt);
-
-  // Brazo derecho (tarrinas pesadas — Z-)
-  const rightBelt = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.04, 0.28), beltMat);
-  rightBelt.position.set(seg.w * 0.75, BELT_TOP, -0.75);
-  rightBelt.rotation.y = -Math.PI / 6;
-  group.add(rightBelt);
-
-  // Guías laterales en V (inox)
-  [-0.92, 0.92].forEach((dz) => {
-    const guide = new THREE.Mesh(new THREE.BoxGeometry(1.25, 0.12, 0.04), inox);
-    guide.position.set(seg.w * 0.52, BELT_TOP + 0.09, dz);
-    guide.rotation.y = dz > 0 ? Math.PI / 6 : -Math.PI / 6;
-    group.add(guide);
+  // Rodillos extremos de la cinta discriminadora
+  [-1.0, 1.0].forEach((dz) => {
+    const roller = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.06, 0.06, 1.2, 12),
+      rollerMat
+    );
+    roller.rotation.x = Math.PI / 2;
+    roller.position.set(seg.w * 0.9, BELT_TOP - 0.01, dz);
+    group.add(roller);
   });
 
-  // Rodillo de retorno en la bifurcación
-  const roller = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.055, 0.055, 1.4, 12),
-    new THREE.MeshStandardMaterial({ color: 0x889aaa, roughness: 0.3, metalness: 0.8 })
+  // Rodillo central de conexión entre cintas
+  const connRoller = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.06, 0.06, 0.4, 12),
+    rollerMat
   );
-  roller.rotation.z = Math.PI / 2;
-  roller.position.set(seg.w * 0.42, BELT_TOP - 0.01, 0);
-  group.add(roller);
+  connRoller.rotation.x = Math.PI / 2;
+  connRoller.position.set(seg.w * 0.42, BELT_TOP - 0.01, 0);
+  group.add(connRoller);
+
+  // Laterales inox de la cinta discriminadora
+  [-1.05, 1.05].forEach((dz) => {
+    const side = new THREE.Mesh(
+      new THREE.BoxGeometry(1.2, 0.1, 0.04),
+      inox
+    );
+    side.position.set(seg.w * 0.9, BELT_TOP + 0.05, dz);
+    group.add(side);
+  });
 }
