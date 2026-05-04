@@ -877,8 +877,7 @@ scene.add(f2);
       guideR.position.set(0.75, BELT_TOP + 0.05, -0.375);
       guideR.rotation.y = -0.165;
       group.add(guideR);
-    }
-    }
+        }
   }
   
   // ── buildModular ───────────────────────────────────────────────────────────
