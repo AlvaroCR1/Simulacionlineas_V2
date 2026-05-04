@@ -868,14 +868,14 @@ scene.add(f2);
      if (segId === "C12") {
       const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
       
-      const guideL = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.75, 0.06, 0.04), inox);
-      guideL.position.set(-seg.w * 0.05, BELT_TOP + 0.05, 0.55);
-      guideL.rotation.y = -Math.PI / 5;
+      const guideL = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.82, 0.06, 0.04), inox);
+      guideL.position.set(0, BELT_TOP + 0.05, 0.6);
+      guideL.rotation.y = -Math.PI / 4.5;
       group.add(guideL);
 
-      const guideR = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.75, 0.06, 0.04), inox);
-      guideR.position.set(-seg.w * 0.05, BELT_TOP + 0.05, -0.55);
-      guideR.rotation.y = Math.PI / 5;
+      const guideR = new THREE.Mesh(new THREE.BoxGeometry(seg.w * 0.82, 0.06, 0.04), inox);
+      guideR.position.set(0, BELT_TOP + 0.05, -0.6);
+      guideR.rotation.y = Math.PI / 4.5;
       group.add(guideR);
     }
   }
