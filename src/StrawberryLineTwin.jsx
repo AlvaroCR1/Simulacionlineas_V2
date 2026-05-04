@@ -31,7 +31,7 @@ import ChatBot from "./ui/ChatBot";
 
 // ─── Geometría de la línea ────────────────────────────────────────────────────
 const SEG_CX = {
-  M1: -25.8,
+  M1: -29,
   M2: -19.23,
   CM: -14.32,
   M3: -7.0,
@@ -178,7 +178,7 @@ function _doSpawn(THREE, st, tray) {
   const mesh = buildTrayMesh(THREE, color, !isRej);
 
   // Spawn ANTES de M1, todas rectas
-  const startX = -28.5;
+  const startX = -32;
   mesh.position.set(startX, BELT_TOP + 0.065, 0);
   mesh.scale.set(0.95, 0.95, 0.95);
   mesh.userData.trayId = tray.id;
@@ -604,7 +604,7 @@ scene.add(f2);
           else if (t.peso_alto) t.targetZ = -1.1;
         }
           // Reconvergencia en C12: volver al centro
-        if (t.discriminatedM1 && t.phase === "M1M2" && pos.x >= -23.2) {
+        if (t.discriminatedM1 && t.phase === "M1M2" && pos.x >= -26.5) {
           t.targetZ = 0;
         }
         }
