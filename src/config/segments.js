@@ -10,27 +10,27 @@
 export const SEGMENTS = [
   // ── Bizerba 1: inicio de la línea, bien separada a la izquierda ───────────
   {
-    id: "M1",
-    type: "machine",
-    name: "Bizerba 1",
-    w: 2.0,
-    h: 2.0,
-    d: 1.6,
-    cx: -25.8,
-    img: "bizerba",
-    showBaliza: true,
-  },
+  id: "M1",
+  type: "machine",
+  name: "Bizerba 1",
+  w: 2.0,
+  h: 2.0,
+  d: 1.6,
+  cx: -29,      // era -25.8
+  img: "bizerba",
+  showBaliza: true,
+},
   // ── Cinta entre Bizerba 1 y 2: centrada, más larga para el espacio ───────
   {
-    id: "C12",
-    type: "belt",
-    name: "Cinta 1→2",
-    w: 3.0,
-    h: 0.22,
-    d: 1.0,
-    cx: -22.2,
-    showBaliza: false,
-  },
+  id: "C12",
+  type: "belt",
+  name: "Cinta 1→2",
+  w: 6.5,       // era 3.0 — más larga
+  h: 0.22,
+  d: 1.8,       // era 1.0 — más ancha para el embudo
+  cx: -24.0,    // era -22.2 — recentrada entre M1 y M2
+  showBaliza: false,
+},
   // ── Bizerba 2: inicio del segundo cuadrado azul ───────────────────────────
   {
     id: "M2",
