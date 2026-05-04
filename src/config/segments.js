@@ -146,45 +146,37 @@ export const SEGMENTS = [
  */
 export const CTRL_DEFS = [
   // ── Caja frontal junto a Bizerba 1 ──────────────────────────────────────
-  {
+ {
     id: "seta_M1_front",
     segId: "M1",
     type: "seta",
     side: "front",
-    dx: 1.2,
-    dz: 0,
-    groupId: "box_M1_front",
+    dx: 3.5,      // era 1.2
+    ...
   },
   {
     id: "btn_M1_front",
     segId: "M1",
     type: "botonera",
     side: "front",
-    dx: 1.2,
-    dz: 0,
-    groupId: "box_M1_front",
-    pauseOnly: ["M1", "C12"],
+    dx: 3.5,      // era 1.2
+    ...
   },
-
-  // ── Caja trasera junto a Bizerba 1 ──────────────────────────────────────
   {
     id: "seta_M1_back",
     segId: "M1",
     type: "seta",
     side: "back",
-    dx: 1.2,
-    dz: 0,
-    groupId: "box_M1_back",
+    dx: 3.5,      // era 1.2
+    ...
   },
   {
     id: "btn_M1_back",
     segId: "M1",
     type: "botonera",
     side: "back",
-    dx: 1.2,
-    dz: 0,
-    groupId: "box_M1_back",
-    pauseOnly: ["M1", "C12"],
+    dx: 3.5,      // era 1.2
+    ...
   },
 
   // ── Seta junto a Bizerba 2 (solo seta, caja simple) ─────────────────────
