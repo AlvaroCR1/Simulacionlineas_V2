@@ -154,7 +154,6 @@ function buildFallback(THREE, group, seg) {
 function buildDiscriminator(THREE, group, seg) {
   const beltMat = new THREE.MeshStandardMaterial({ color: 0x484e53, roughness: 0.9, metalness: 0.05 });
   const inox = new THREE.MeshStandardMaterial({ color: 0xa0b0b8, roughness: 0.3, metalness: 0.65 });
-  const rollerMat = new THREE.MeshStandardMaterial({ color: 0x889aaa, roughness: 0.3, metalness: 0.8 });
 
   // Cinta discriminadora ancha (después de la cinta principal)
   const discBelt = new THREE.Mesh(
@@ -163,26 +162,6 @@ function buildDiscriminator(THREE, group, seg) {
   );
   discBelt.position.set(seg.w * 0.9, BELT_TOP, 0);
   group.add(discBelt);
-
-  // Rodillos extremos de la cinta discriminadora
-  [-1.0, 1.0].forEach((dz) => {
-    const roller = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.06, 0.06, 1.2, 12),
-      rollerMat
-    );
-    roller.rotation.x = Math.PI / 2;
-    roller.position.set(seg.w * 0.9, BELT_TOP - 0.01, dz);
-    group.add(roller);
-  });
-
-  // Rodillo central de conexión entre cintas
-  const connRoller = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.06, 0.06, 0.4, 12),
-    rollerMat
-  );
-  connRoller.rotation.x = Math.PI / 2;
-  connRoller.position.set(seg.w * 0.42, BELT_TOP - 0.01, 0);
-  group.add(connRoller);
 
   // Laterales inox de la cinta discriminadora
   [-1.05, 1.05].forEach((dz) => {
