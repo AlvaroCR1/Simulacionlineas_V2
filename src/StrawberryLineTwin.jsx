@@ -596,9 +596,10 @@ scene.add(f2);
         }
         }
         // Actualizar segId para el sistema de pausas
-        const seg = SEGMENTS.find((s) => s.id === t.segId);
+        const tSegId = t.segId;
+        const seg = SEGMENTS.find((s) => s.id === tSegId);
         if (seg && pos.x > seg.cx + seg.w / 2) {
-          const idx = SEGMENTS.findIndex((s) => s.id === t.segId);
+          const idx = SEGMENTS.findIndex((s) => s.id === tSegId);
           if (idx < SEGMENTS.length - 1) t.segId = SEGMENTS[idx + 1].id;
         }
 
